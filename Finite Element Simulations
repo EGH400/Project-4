@@ -1,1 +1,191 @@
 
+clear all
+close all
+
+f=1e5;
+w=2*pi*f;
+
+s=tf('s');  
+
+RL=1;
+
+LT=10E-6;
+CT=1/((w^2)*LT);
+
+
+LR=10E-6;
+CR=1/((w^2)*LR);
+
+
+M=1e-6;
+
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+
+%TF=(s*eye(4)-A)\B;
+TF=(s*eye(4)-A)\B;
+
+T=100/f;
+t=[0:0.0001:1]*T;
+Vm=1;
+vin=Vm*sin(w*t);
+
+IR=lsim(TF(4),vin,t);
+
+
+
+%  
+% N = 257;
+% u = [1 zeros(1,N-1)];
+% 
+% x = [0;0;0;0];
+% for k = 1:N
+%     x(k) = A*x + B*u(k);
+% end
+
+
+
+
+% SIMULINK
+sim('SCC.slx')
+figure(6)
+bodemag(TF(1))
+title("Bodeplot of Vin")
+
+
+figure(1)
+subplot(2,1,1)
+hold on
+title("Series Compensated (Vin Comparison)")
+plot(t,vin)
+plot(t_SIM,V_IN_SIM)
+subplot(2,1,2)
+hold on
+title("Series Compensated (IR Comparison)")
+plot(t,IR)
+plot(t_SIM,IR_SIM)
+hold off
+hold off
+
+% V in comparison
+figure(2)
+subplot(2,1,1)
+plot(t,vin)
+title("Series Compensated (Vin Comparison)")
+ylabel("Calculated Vin(V)")
+xlabel("Time(s)")
+subplot(2,1,2)
+plot(t_SIM,V_IN_SIM)
+ylabel("Simulated Vin(V)")
+xlabel("Time(s)")
+
+
+% IR comparison
+figure(3)
+subplot(2,1,1)
+hold on
+title("Series Compensated (IR Comparison)")
+plot(t,IR)
+ylabel("Calculated IR(I)")
+xlabel("Time(s)")
+subplot(2,1,2)
+hold on
+plot(t_SIM,IR_SIM)
+ylabel("Simulated IR(I)")
+xlabel("Time(s)")
+hold off
+
+figure(10)
+hold on
+
+M=1e-8;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=1e-7;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=5e-7;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=1e-6;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=2e-6;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=3e-6;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=4e-6;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+
+M=5e-6;
+DL=M^2-LR*LT;
+A=[0 0  1/CT 0; 0 0 0 1/CR; LR/DL M/DL 0 M*RL/DL; M/DL LT/DL 0 (LT*RL)/DL];
+B=[0; 0; -LR/DL; -M/DL];
+TF=(s*eye(4)-A)\B;
+bode(TF(1))
+hold off
+
+legend("M=1e-8","M=1e-7","M=5e-7","M=1e-6","M=2e-6","M=3e-6","M=4e-6","M=5e-6")
+% figure(1)
+% plot(t,vin)
+% ylabel("Vin(V)")
+% xlabel("Time(s)")
+% title("Calculated Vin Vs Time")
+% 
+% 
+% figure(2)
+% plot(t_SIM,V_IN_SIM)
+% ylabel("Vin(V)")
+% xlabel("Time(s)")
+% title("Simulated Vin Vs Time")
+% 
+% figure(3)
+% plot(t,IR)
+% ylabel("Vin(V)")
+% xlabel("Time(s)")
+% title("Calculated IR Vs Time")
+% 
+% figure(4)
+% plot(t_SIM,IR_SIM)
+% ylabel("Vin(V)")
+% xlabel("Time(s)")
+% title("Simulated IR Vs Time")
+
+%% Problems
+% IR
+% IR_SIM 
+
+
+
+
